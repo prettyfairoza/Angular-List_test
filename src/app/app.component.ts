@@ -86,6 +86,7 @@ export class AppComponent {
   }
 
   onCancelSVO(VOFormElement: any, i: number) {
+    VOFormElement.get('VORows').at(i).reset();
     VOFormElement.get('VORows').at(i).get('isEditable').patchValue(true);
   }
 
