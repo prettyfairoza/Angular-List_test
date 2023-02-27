@@ -24,8 +24,8 @@ export class AppComponent {
   @ViewChild('table') table!: MatTable<PeriodicElement>;
   dataSource = new MatTableDataSource<any>();
   VOForm!: FormGroup;
-  isEditableNew: boolean = true;
   isLoading = true;
+  previousValues = null;
 
   displayedColumns: string[] = [
     'name',
@@ -78,6 +78,7 @@ export class AppComponent {
   }
 
   onEditSVO(VOFormElement: any, i: number) {
+    this.previousValues = VOFormElement.get('VORows').at(i).value;
     VOFormElement.get('VORows').at(i).get('isEditable').patchValue(false);
   }
 
@@ -86,8 +87,11 @@ export class AppComponent {
   }
 
   onCancelSVO(VOFormElement: any, i: number) {
-    VOFormElement.get('VORows').at(i).reset();
+    if (this.previousValues) {
+      VOFormElement.get('VORows').at(i).reset(this.previousValues);
+    }
     VOFormElement.get('VORows').at(i).get('isEditable').patchValue(true);
+    this.previousValues = null;
   }
 
   onDelete(VOFormElement: any, i: number) {
